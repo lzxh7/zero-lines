@@ -1,0 +1,79 @@
+[gd_scene load_steps=11 format=3 uid="uid://wyghu87u41ku"]
+
+[ext_resource type="Texture2D" uid="uid://bxiiy2qupjsys" path="res://icon.svg" id="1_2hwr3"]
+[ext_resource type="Script" path="res://scripts_bad_delete_me.gd" id="1_jlj0q"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a7ajx"]
+friction = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7fwx5"]
+size = Vector2(50, 50)
+
+[sub_resource type="InputEventAction" id="InputEventAction_dbtfa"]
+action = &"move_left"
+
+[sub_resource type="Shortcut" id="Shortcut_b8oaw"]
+events = [SubResource("InputEventAction_dbtfa")]
+
+[sub_resource type="InputEventAction" id="InputEventAction_kohwu"]
+action = &"move_left"
+
+[sub_resource type="Shortcut" id="Shortcut_ge2gk"]
+events = [SubResource("InputEventAction_kohwu")]
+
+[sub_resource type="InputEventAction" id="InputEventAction_ejdkm"]
+action = &"jump"
+
+[sub_resource type="Shortcut" id="Shortcut_r6rjq"]
+events = [SubResource("InputEventAction_ejdkm")]
+
+[node name="Player" type="RigidBody2D"]
+position = Vector2(632, 547)
+physics_material_override = SubResource("PhysicsMaterial_a7ajx")
+linear_damp = 2.0
+constant_force = Vector2(-100, 0)
+script = ExtResource("1_jlj0q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_7fwx5")
+
+[node name="Icon" type="Sprite2D" parent="."]
+scale = Vector2(0.385, 0.385)
+texture = ExtResource("1_2hwr3")
+
+[node name="Controls" type="Node" parent="."]
+
+[node name="LeftButtonPress" type="Button" parent="Controls"]
+offset_left = 193.0
+offset_top = 12.0
+offset_right = 201.0
+offset_bottom = 20.0
+toggle_mode = true
+button_pressed = true
+shortcut = SubResource("Shortcut_b8oaw")
+
+[node name="ToggleHelper2" type="Node2D" parent="Controls/LeftButtonPress"]
+unique_name_in_owner = true
+process_priority = -1
+position = Vector2(-193, -12)
+
+[node name="LeftButtonRelease" type="Button" parent="Controls"]
+offset_right = 8.0
+offset_bottom = 8.0
+toggle_mode = true
+shortcut = SubResource("Shortcut_ge2gk")
+
+[node name="ToggleHelper1" type="Node2D" parent="Controls/LeftButtonRelease"]
+unique_name_in_owner = true
+visible = false
+
+[node name="JumpButton" type="Button" parent="Controls"]
+offset_right = 8.0
+offset_bottom = 8.0
+shortcut = SubResource("Shortcut_r6rjq")
+
+[connection signal="toggled" from="Controls/LeftButtonPress" to="Controls/LeftButtonPress/ToggleHelper2" method="set_visible"]
+[connection signal="hidden" from="Controls/LeftButtonPress/ToggleHelper2" to="." method="set_constant_force" binds= [Vector2(-100, 0)]]
+[connection signal="toggled" from="Controls/LeftButtonRelease" to="Controls/LeftButtonRelease/ToggleHelper1" method="set_visible"]
+[connection signal="hidden" from="Controls/LeftButtonRelease/ToggleHelper1" to="." method="set_constant_force" binds= [Vector2(0, 0)]]
+[connection signal="pressed" from="Controls/JumpButton" to="." method="apply_central_impulse" binds= [Vector2(0, -500)]]
