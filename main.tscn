@@ -1,9 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://cdvcm8f5fq5ys"]
+[gd_scene load_steps=5 format=3 uid="uid://cdvcm8f5fq5ys"]
 
 [ext_resource type="PackedScene" uid="uid://wyghu87u41ku" path="res://player.tscn" id="1_ou0uc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8hdci"]
 size = Vector2(656, 40)
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_84uyb"]
+graph_offset = Vector2(40.0757, 213.734)
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_3emur"]
+allow_transition_to_self = true
+states/BlendTree/node = SubResource("AnimationNodeBlendTree_84uyb")
+states/BlendTree/position = Vector2(446, 65)
+states/Start/position = Vector2(233, 109)
 
 [node name="Main" type="Node"]
 
@@ -11,6 +20,7 @@ size = Vector2(656, 40)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="World"]
 position = Vector2(323, 582)
+collision_layer = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/StaticBody2D"]
 position = Vector2(327, 22)
@@ -21,3 +31,9 @@ offset_right = 654.0
 offset_bottom = 45.0
 
 [node name="Player" parent="World" instance=ExtResource("1_ou0uc")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="World"]
+root_node = NodePath("../..")
+
+[node name="AnimationTree" type="AnimationTree" parent="World/AnimationPlayer"]
+tree_root = SubResource("AnimationNodeStateMachine_3emur")

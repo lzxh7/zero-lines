@@ -1,7 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://wyghu87u41ku"]
+[gd_scene load_steps=14 format=3 uid="uid://wyghu87u41ku"]
 
 [ext_resource type="Texture2D" uid="uid://bxiiy2qupjsys" path="res://icon.svg" id="1_2hwr3"]
-[ext_resource type="Script" path="res://scripts_bad_delete_me.gd" id="1_jlj0q"]
+[ext_resource type="Script" path="res://delete_me.gd" id="1_ul2mp"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a7ajx"]
 friction = 0.0
@@ -15,11 +15,17 @@ action = &"move_left"
 [sub_resource type="Shortcut" id="Shortcut_b8oaw"]
 events = [SubResource("InputEventAction_dbtfa")]
 
-[sub_resource type="InputEventAction" id="InputEventAction_kohwu"]
-action = &"move_left"
+[sub_resource type="InputEventAction" id="InputEventAction_b7rry"]
+action = &"move_right"
 
-[sub_resource type="Shortcut" id="Shortcut_ge2gk"]
-events = [SubResource("InputEventAction_kohwu")]
+[sub_resource type="Shortcut" id="Shortcut_gpeen"]
+events = [SubResource("InputEventAction_b7rry")]
+
+[sub_resource type="InputEventAction" id="InputEventAction_bwtxi"]
+action = &"cancel_motion"
+
+[sub_resource type="Shortcut" id="Shortcut_2l4sy"]
+events = [SubResource("InputEventAction_bwtxi")]
 
 [sub_resource type="InputEventAction" id="InputEventAction_ejdkm"]
 action = &"jump"
@@ -27,12 +33,15 @@ action = &"jump"
 [sub_resource type="Shortcut" id="Shortcut_r6rjq"]
 events = [SubResource("InputEventAction_ejdkm")]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_63h3w"]
+size = Vector2(50, 2)
+
 [node name="Player" type="RigidBody2D"]
 position = Vector2(632, 547)
 physics_material_override = SubResource("PhysicsMaterial_a7ajx")
-linear_damp = 2.0
-constant_force = Vector2(-100, 0)
-script = ExtResource("1_jlj0q")
+linear_damp = 5.0
+constant_force = Vector2(0, 400)
+script = ExtResource("1_ul2mp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_7fwx5")
@@ -43,37 +52,59 @@ texture = ExtResource("1_2hwr3")
 
 [node name="Controls" type="Node" parent="."]
 
-[node name="LeftButtonPress" type="Button" parent="Controls"]
+[node name="LeftButton" type="Button" parent="Controls"]
+modulate = Color(1, 1, 1, 0)
 offset_left = 193.0
 offset_top = 12.0
 offset_right = 201.0
 offset_bottom = 20.0
-toggle_mode = true
-button_pressed = true
 shortcut = SubResource("Shortcut_b8oaw")
 
-[node name="ToggleHelper2" type="Node2D" parent="Controls/LeftButtonPress"]
-unique_name_in_owner = true
-process_priority = -1
-position = Vector2(-193, -12)
+[node name="RightButton" type="Button" parent="Controls"]
+modulate = Color(1, 1, 1, 0)
+offset_left = 193.0
+offset_top = 12.0
+offset_right = 201.0
+offset_bottom = 20.0
+shortcut = SubResource("Shortcut_gpeen")
 
-[node name="LeftButtonRelease" type="Button" parent="Controls"]
-offset_right = 8.0
-offset_bottom = 8.0
-toggle_mode = true
-shortcut = SubResource("Shortcut_ge2gk")
-
-[node name="ToggleHelper1" type="Node2D" parent="Controls/LeftButtonRelease"]
-unique_name_in_owner = true
-visible = false
+[node name="DownButton" type="Button" parent="Controls"]
+modulate = Color(1, 1, 1, 0)
+offset_left = 193.0
+offset_top = 12.0
+offset_right = 201.0
+offset_bottom = 20.0
+shortcut = SubResource("Shortcut_2l4sy")
 
 [node name="JumpButton" type="Button" parent="Controls"]
+modulate = Color(1, 1, 1, 0)
 offset_right = 8.0
 offset_bottom = 8.0
 shortcut = SubResource("Shortcut_r6rjq")
 
-[connection signal="toggled" from="Controls/LeftButtonPress" to="Controls/LeftButtonPress/ToggleHelper2" method="set_visible"]
-[connection signal="hidden" from="Controls/LeftButtonPress/ToggleHelper2" to="." method="set_constant_force" binds= [Vector2(-100, 0)]]
-[connection signal="toggled" from="Controls/LeftButtonRelease" to="Controls/LeftButtonRelease/ToggleHelper1" method="set_visible"]
-[connection signal="hidden" from="Controls/LeftButtonRelease/ToggleHelper1" to="." method="set_constant_force" binds= [Vector2(0, 0)]]
-[connection signal="pressed" from="Controls/JumpButton" to="." method="apply_central_impulse" binds= [Vector2(0, -500)]]
+[node name="GroundDetection" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GroundDetection"]
+position = Vector2(0, 25)
+shape = SubResource("RectangleShape2D_63h3w")
+
+[node name="EnterGround" type="Timer" parent="GroundDetection"]
+wait_time = 0.001
+one_shot = true
+
+[node name="ExitGround" type="Timer" parent="GroundDetection"]
+wait_time = 0.001
+one_shot = true
+
+[connection signal="pressed" from="Controls/LeftButton" to="." method="set" binds= [&"constant_force", Vector2(-1000, 400)]]
+[connection signal="pressed" from="Controls/RightButton" to="." method="set_constant_force" binds= [Vector2(1000, 400)]]
+[connection signal="pressed" from="Controls/DownButton" to="." method="set_constant_force" binds= [Vector2(0, 400)]]
+[connection signal="pressed" from="Controls/JumpButton" to="." method="apply_central_impulse" binds= [Vector2(0, -1500)]]
+[connection signal="body_entered" from="GroundDetection" to="." method="_on_ground_detection_body_entered"]
+[connection signal="body_entered" from="GroundDetection" to="GroundDetection/EnterGround" method="start" unbinds=1]
+[connection signal="body_exited" from="GroundDetection" to="GroundDetection/ExitGround" method="start" unbinds=1]
+[connection signal="timeout" from="GroundDetection/EnterGround" to="Controls/JumpButton" method="set_block_signals" binds= [false]]
+[connection signal="timeout" from="GroundDetection/ExitGround" to="." method="_on_exit_ground_timeout"]
+[connection signal="timeout" from="GroundDetection/ExitGround" to="Controls/JumpButton" method="set_block_signals" binds= [true]]
