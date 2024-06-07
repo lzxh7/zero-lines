@@ -42,6 +42,12 @@ cancel_motion={
 ]
 }
 
+[layer_names]
+
+2d_physics/layer_2="ground"
+2d_physics/layer_3="enemies"
+2d_physics/layer_4="player"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
