@@ -1,13 +1,18 @@
-[gd_scene load_steps=14 format=3 uid="uid://wyghu87u41ku"]
+[gd_scene load_steps=25 format=3 uid="uid://wyghu87u41ku"]
 
-[ext_resource type="Texture2D" uid="uid://bxiiy2qupjsys" path="res://icon.svg" id="1_2hwr3"]
 [ext_resource type="Script" path="res://delete_me.gd" id="1_ul2mp"]
+[ext_resource type="Texture2D" uid="uid://b8uh888fj33ex" path="res://tilemap-characters.png" id="2_1kdnf"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a7ajx"]
 friction = 0.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7fwx5"]
-size = Vector2(50, 50)
+[sub_resource type="AtlasTexture" id="AtlasTexture_m0y77"]
+atlas = ExtResource("2_1kdnf")
+region = Rect2(0, 0, 50, 25)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3d3b0"]
+radius = 29.0
+height = 92.0
 
 [sub_resource type="InputEventAction" id="InputEventAction_dbtfa"]
 action = &"move_left"
@@ -33,22 +38,176 @@ action = &"jump"
 [sub_resource type="Shortcut" id="Shortcut_r6rjq"]
 events = [SubResource("InputEventAction_ejdkm")]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_63h3w"]
-size = Vector2(50, 2)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jeqe1"]
+radius = 28.0
+height = 84.0
+
+[sub_resource type="Animation" id="Animation_2f42k"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Icon:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_qnkuu"]
+resource_name = "jump"
+length = 0.0166683
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Icon:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_mwaj6"]
+resource_name = "rest"
+length = 0.0166683
+loop_mode = 1
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Icon:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_rvugt"]
+resource_name = "run"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Icon:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2i(0, 0), Vector2i(1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_cmsq4"]
+resource_name = "run_right"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Icon:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2i(0, 0), Vector2i(1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cogm1"]
+_data = {
+"RESET": SubResource("Animation_2f42k"),
+"jump": SubResource("Animation_qnkuu"),
+"rest": SubResource("Animation_mwaj6"),
+"run_left": SubResource("Animation_rvugt"),
+"run_right": SubResource("Animation_cmsq4")
+}
+
+[sub_resource type="Animation" id="Animation_bb6it"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Icon:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(4, 4)]
+}
+
+[sub_resource type="Animation" id="Animation_eofqy"]
+resource_name = "look_left"
+length = 0.0166683
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Icon:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(4, 4)]
+}
+
+[sub_resource type="Animation" id="Animation_2uiay"]
+resource_name = "look_right"
+length = 0.0166683
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Icon:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-4, 4)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1q6vn"]
+_data = {
+"RESET": SubResource("Animation_bb6it"),
+"look_left": SubResource("Animation_eofqy"),
+"look_right": SubResource("Animation_2uiay")
+}
 
 [node name="Player" type="RigidBody2D"]
-position = Vector2(632, 547)
 physics_material_override = SubResource("PhysicsMaterial_a7ajx")
+gravity_scale = 2.5
+lock_rotation = true
 linear_damp = 5.0
 constant_force = Vector2(0, 400)
 script = ExtResource("1_ul2mp")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_7fwx5")
-
 [node name="Icon" type="Sprite2D" parent="."]
-scale = Vector2(0.385, 0.385)
-texture = ExtResource("1_2hwr3")
+texture_filter = 1
+scale = Vector2(4, 4)
+texture = SubResource("AtlasTexture_m0y77")
+offset = Vector2(0.5, 0)
+hframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_3d3b0")
 
 [node name="Controls" type="Node" parent="."]
 
@@ -87,8 +246,8 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GroundDetection"]
-position = Vector2(0, 25)
-shape = SubResource("RectangleShape2D_63h3w")
+position = Vector2(0, 5)
+shape = SubResource("CapsuleShape2D_jeqe1")
 
 [node name="EnterGround" type="Timer" parent="GroundDetection"]
 wait_time = 0.001
@@ -98,13 +257,32 @@ one_shot = true
 wait_time = 0.001
 one_shot = true
 
-[connection signal="pressed" from="Controls/LeftButton" to="." method="set" binds= [&"constant_force", Vector2(-1000, 400)]]
-[connection signal="pressed" from="Controls/RightButton" to="." method="set_constant_force" binds= [Vector2(1000, 400)]]
-[connection signal="pressed" from="Controls/DownButton" to="." method="set_constant_force" binds= [Vector2(0, 400)]]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_cogm1")
+}
+
+[node name="LookLeftRight" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_1q6vn")
+}
+
+[connection signal="ready" from="." to="AnimationPlayer" method="play" binds= [&"rest"]]
+[connection signal="pressed" from="Controls/LeftButton" to="." method="set" binds= [&"constant_force", Vector2(-1500, 0)]]
+[connection signal="pressed" from="Controls/LeftButton" to="AnimationPlayer" method="play" binds= [&"run_left"]]
+[connection signal="pressed" from="Controls/LeftButton" to="LookLeftRight" method="play" binds= [&"look_left"]]
+[connection signal="pressed" from="Controls/RightButton" to="." method="set_constant_force" binds= [Vector2(1500, 0)]]
+[connection signal="pressed" from="Controls/RightButton" to="AnimationPlayer" method="play" binds= [&"run_right"]]
+[connection signal="pressed" from="Controls/RightButton" to="LookLeftRight" method="play" binds= [&"look_right"]]
+[connection signal="pressed" from="Controls/DownButton" to="." method="set_constant_force" binds= [Vector2(0, 0)]]
+[connection signal="pressed" from="Controls/DownButton" to="AnimationPlayer" method="play" binds= [&"rest"]]
 [connection signal="pressed" from="Controls/JumpButton" to="." method="apply_central_impulse" binds= [Vector2(0, -1500)]]
 [connection signal="body_entered" from="GroundDetection" to="." method="_on_ground_detection_body_entered"]
 [connection signal="body_entered" from="GroundDetection" to="GroundDetection/EnterGround" method="start" unbinds=1]
 [connection signal="body_exited" from="GroundDetection" to="GroundDetection/ExitGround" method="start" unbinds=1]
 [connection signal="timeout" from="GroundDetection/EnterGround" to="Controls/JumpButton" method="set_block_signals" binds= [false]]
+[connection signal="timeout" from="GroundDetection/EnterGround" to="AnimationPlayer" method="set_active" binds= [true]]
 [connection signal="timeout" from="GroundDetection/ExitGround" to="." method="_on_exit_ground_timeout"]
+[connection signal="timeout" from="GroundDetection/ExitGround" to="Icon" method="set" binds= [&"frame_coords", Vector2i(1, 0)]]
 [connection signal="timeout" from="GroundDetection/ExitGround" to="Controls/JumpButton" method="set_block_signals" binds= [true]]
+[connection signal="timeout" from="GroundDetection/ExitGround" to="AnimationPlayer" method="set_active" binds= [false]]

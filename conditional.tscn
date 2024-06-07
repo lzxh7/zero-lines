@@ -114,6 +114,7 @@ process_mode = 4
 shape = SubResource("RectangleShape2D_qvpuq")
 
 [node name="Output" type="Button" parent="."]
+editor_description = "916924797389"
 modulate = Color(1, 1, 1, 0)
 offset_right = 8.0
 offset_bottom = 8.0
