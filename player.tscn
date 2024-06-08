@@ -1,6 +1,8 @@
-[gd_scene load_steps=26 format=3 uid="uid://wyghu87u41ku"]
+[gd_scene load_steps=28 format=3 uid="uid://wyghu87u41ku"]
 
 [ext_resource type="Texture2D" uid="uid://b8uh888fj33ex" path="res://tilemap-characters.png" id="2_1kdnf"]
+[ext_resource type="AudioStream" uid="uid://2weyhbap668m" path="res://jump.wav" id="2_m4kar"]
+[ext_resource type="AudioStream" uid="uid://hgh0e1eryvpo" path="res://enemy_death.wav" id="3_uvy3b"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a7ajx"]
 friction = 0.0
@@ -247,6 +249,9 @@ offset_right = 8.0
 offset_bottom = 8.0
 shortcut = SubResource("Shortcut_r6rjq")
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Controls/JumpButton"]
+stream = ExtResource("2_m4kar")
+
 [node name="GroundDetection" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 2
@@ -286,6 +291,9 @@ shape = SubResource("RectangleShape2D_m37ig")
 wait_time = 0.001
 one_shot = true
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Squasher"]
+stream = ExtResource("3_uvy3b")
+
 [node name="Head" type="Area2D" parent="."]
 collision_layer = 128
 collision_mask = 0
@@ -317,6 +325,7 @@ libraries = {
 [connection signal="pressed" from="Controls/RightButton" to="LookLeftRight" method="play" binds= [&"look_right"]]
 [connection signal="pressed" from="Controls/DownButton" to="." method="set_constant_force" binds= [Vector2(0, 0)]]
 [connection signal="pressed" from="Controls/DownButton" to="AnimationPlayer" method="play" binds= [&"rest"]]
+[connection signal="pressed" from="Controls/JumpButton" to="Controls/JumpButton/AudioStreamPlayer" method="play"]
 [connection signal="pressed" from="Controls/JumpButton" to="." method="apply_central_impulse" binds= [Vector2(0, -1500)]]
 [connection signal="body_entered" from="GroundDetection" to="." method="_on_ground_detection_body_entered"]
 [connection signal="body_entered" from="GroundDetection" to="GroundDetection/EnterGround" method="start" unbinds=1]
@@ -330,6 +339,7 @@ libraries = {
 [connection signal="timeout" from="GroundDetection/ExitGround" to="AnimationPlayer" method="set_active" binds= [false]]
 [connection signal="body_shape_entered" from="EnemyDetection" to="EnemyDetection/Timer" method="start" unbinds=4]
 [connection signal="area_entered" from="Squasher" to="Squasher/Timer" method="start" unbinds=1]
+[connection signal="area_entered" from="Squasher" to="Squasher/AudioStreamPlayer" method="play" unbinds=1]
 [connection signal="timeout" from="Squasher/Timer" to="." method="apply_central_impulse" binds= [Vector2(0, -1200)]]
 [connection signal="area_entered" from="Head" to="Head/Timer" method="start" unbinds=1]
 [connection signal="timeout" from="Head/Timer" to="." method="apply_central_impulse" binds= [Vector2(0, -1200)]]

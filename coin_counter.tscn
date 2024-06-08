@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://crksv8u8mmr5s"]
+[gd_scene load_steps=4 format=3 uid="uid://crksv8u8mmr5s"]
 
 [ext_resource type="PackedScene" uid="uid://iqc1ca157k3" path="res://coin_counter_internal.tscn" id="1_x8pab"]
 [ext_resource type="Texture2D" uid="uid://tgl6d0xe6cvp" path="res://coin_frame.png" id="2_f0vjf"]
+[ext_resource type="AudioStream" uid="uid://d14i8tff7h2xv" path="res://coin.wav" id="3_7japi"]
 
 [node name="CoinCounter" type="Control"]
 layout_mode = 3
@@ -46,6 +47,10 @@ expand_mode = 2
 wait_time = 0.001
 one_shot = true
 
-[connection signal="timeout" from="AddCoin" to="SubViewportContainer/SubViewport/Node2D/RigidBody2D" method="apply_central_impulse" binds= [Vector2(2160, 0)]]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="AddCoin"]
+stream = ExtResource("3_7japi")
+
+[connection signal="timeout" from="AddCoin" to="AddCoin/AudioStreamPlayer" method="play"]
+[connection signal="timeout" from="AddCoin" to="SubViewportContainer/SubViewport/Node2D/AnimationPlayer" method="play" binds= [&"add_coin"]]
 
 [editable path="SubViewportContainer/SubViewport/Node2D"]
