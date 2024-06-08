@@ -1,7 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://b8jijmegimlg2"]
+[gd_scene load_steps=17 format=3 uid="uid://b8jijmegimlg2"]
 
-[ext_resource type="Script" path="res://delete_me.gd" id="1_kwmjk"]
 [ext_resource type="Texture2D" uid="uid://b8uh888fj33ex" path="res://tilemap-characters.png" id="2_e388g"]
+[ext_resource type="PackedScene" uid="uid://diovi7lou84m" path="res://coin.tscn" id="2_wgoo0"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a7ajx"]
 friction = 0.0
@@ -128,18 +128,84 @@ _data = {
 "look_right": SubResource("Animation_2uiay")
 }
 
+[sub_resource type="Animation" id="Animation_yvl23"]
+resource_name = "reset"
+length = 0.0166683
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:process_mode")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_v46ag"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:process_mode")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tkddg"]
+_data = {
+"RESET": SubResource("Animation_v46ag"),
+"reset": SubResource("Animation_yvl23")
+}
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ogcno"]
 size = Vector2(5, 20)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_m3y8q"]
+radius = 8.99999
+height = 60.0
 
 [node name="Enemy" type="RigidBody2D"]
 position = Vector2(-1, 0)
 collision_layer = 4
+collision_mask = 65
 physics_material_override = SubResource("PhysicsMaterial_a7ajx")
 gravity_scale = 2.5
 lock_rotation = true
 linear_damp = 5.0
 constant_force = Vector2(-2000, 0)
-script = ExtResource("1_kwmjk")
 
 [node name="Icon" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -164,9 +230,14 @@ libraries = {
 "": SubResource("AnimationLibrary_1q6vn")
 }
 
+[node name="Reset" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_tkddg")
+}
+
 [node name="GoRight" type="Area2D" parent="."]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 66
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GoRight"]
 position = Vector2(-29.5, 0)
@@ -178,7 +249,7 @@ one_shot = true
 
 [node name="GoLeft" type="Area2D" parent="."]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 66
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GoLeft"]
 position = Vector2(30, 0)
@@ -189,9 +260,29 @@ wait_time = 0.001
 one_shot = true
 
 [node name="SquashDetection" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SquashDetection"]
+position = Vector2(0, -21)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_m3y8q")
+
+[node name="Timer" type="Timer" parent="SquashDetection"]
+wait_time = 0.001
+one_shot = true
+
+[node name="Coin" parent="." instance=ExtResource("2_wgoo0")]
+visible = false
 
 [connection signal="ready" from="." to="AnimationPlayer" method="play" binds= [&"run"]]
 [connection signal="body_entered" from="GoRight" to="GoRight/Timer" method="start" unbinds=1]
 [connection signal="timeout" from="GoRight/Timer" to="LookLeftRight" method="play" binds= [&"look_right"]]
 [connection signal="body_entered" from="GoLeft" to="GoLeft/Timer" method="start" unbinds=1]
 [connection signal="timeout" from="GoLeft/Timer" to="LookLeftRight" method="play" binds= [&"look_left"]]
+[connection signal="area_entered" from="SquashDetection" to="SquashDetection/Timer" method="start" unbinds=1]
+[connection signal="timeout" from="SquashDetection/Timer" to="Icon" method="hide"]
+[connection signal="timeout" from="SquashDetection/Timer" to="Coin/Reveal" method="start"]
+[connection signal="timeout" from="SquashDetection/Timer" to="." method="set_process_mode" binds= [4]]
+
+[editable path="Coin"]

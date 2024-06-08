@@ -1,6 +1,5 @@
-[gd_scene load_steps=26 format=3 uid="uid://wyghu87u41ku"]
+[gd_scene load_steps=25 format=3 uid="uid://wyghu87u41ku"]
 
-[ext_resource type="Script" path="res://delete_me.gd" id="1_ul2mp"]
 [ext_resource type="Texture2D" uid="uid://b8uh888fj33ex" path="res://tilemap-characters.png" id="2_1kdnf"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a7ajx"]
@@ -43,7 +42,7 @@ radius = 28.0
 height = 84.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m37ig"]
-size = Vector2(20, 7)
+size = Vector2(53, 23)
 
 [sub_resource type="Animation" id="Animation_2f42k"]
 length = 0.001
@@ -99,6 +98,7 @@ tracks/0/keys = {
 resource_name = "run"
 length = 0.6
 loop_mode = 1
+step = 0.0166667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -106,7 +106,7 @@ tracks/0/path = NodePath("Icon:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
+"times": PackedFloat32Array(0.0166667, 0.316667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [Vector2i(0, 0), Vector2i(1, 0)]
@@ -201,7 +201,6 @@ gravity_scale = 2.5
 lock_rotation = true
 linear_damp = 5.0
 constant_force = Vector2(0, 400)
-script = ExtResource("1_ul2mp")
 
 [node name="Icon" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -264,19 +263,25 @@ one_shot = true
 [node name="EnemyDetection" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 4
-monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetection"]
 shape = SubResource("CapsuleShape2D_3d3b0")
 
 [node name="Timer" type="Timer" parent="EnemyDetection"]
 wait_time = 0.001
+one_shot = true
 
 [node name="Squasher" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 32
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Squasher"]
-position = Vector2(0, 46.5)
+position = Vector2(0, 38.5)
 shape = SubResource("RectangleShape2D_m37ig")
+
+[node name="Timer" type="Timer" parent="Squasher"]
+wait_time = 0.001
+one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -301,10 +306,13 @@ libraries = {
 [connection signal="body_entered" from="GroundDetection" to="." method="_on_ground_detection_body_entered"]
 [connection signal="body_entered" from="GroundDetection" to="GroundDetection/EnterGround" method="start" unbinds=1]
 [connection signal="body_exited" from="GroundDetection" to="GroundDetection/ExitGround" method="start" unbinds=1]
+[connection signal="timeout" from="GroundDetection/EnterGround" to="Icon" method="set" binds= [&"frame_coords", Vector2i(0, 0)]]
 [connection signal="timeout" from="GroundDetection/EnterGround" to="Controls/JumpButton" method="set_block_signals" binds= [false]]
 [connection signal="timeout" from="GroundDetection/EnterGround" to="AnimationPlayer" method="set_active" binds= [true]]
 [connection signal="timeout" from="GroundDetection/ExitGround" to="." method="_on_exit_ground_timeout"]
 [connection signal="timeout" from="GroundDetection/ExitGround" to="Icon" method="set" binds= [&"frame_coords", Vector2i(1, 0)]]
 [connection signal="timeout" from="GroundDetection/ExitGround" to="Controls/JumpButton" method="set_block_signals" binds= [true]]
 [connection signal="timeout" from="GroundDetection/ExitGround" to="AnimationPlayer" method="set_active" binds= [false]]
-[connection signal="body_entered" from="EnemyDetection" to="EnemyDetection/Timer" method="start" unbinds=1]
+[connection signal="body_shape_entered" from="EnemyDetection" to="EnemyDetection/Timer" method="start" unbinds=4]
+[connection signal="area_entered" from="Squasher" to="Squasher/Timer" method="start" unbinds=1]
+[connection signal="timeout" from="Squasher/Timer" to="." method="apply_central_impulse" binds= [Vector2(0, -1200)]]
