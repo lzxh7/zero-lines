@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://d0ycgh4mre2xw"]
+
+[ext_resource type="PackedScene" uid="uid://diovi7lou84m" path="res://coin.tscn" id="1_6cjk5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6hntf"]
+size = Vector2(72, 8)
+
+[node name="CoinSpawner" type="Area2D"]
+collision_mask = 128
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 28)
+shape = SubResource("RectangleShape2D_6hntf")
+
+[node name="Coin" parent="." instance=ExtResource("1_6cjk5")]
+visible = false
+position = Vector2(0, -68)
+
+[connection signal="area_entered" from="." to="Coin/Reveal" method="start" unbinds=1]
+
+[editable path="Coin"]

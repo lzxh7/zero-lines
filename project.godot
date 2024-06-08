@@ -15,6 +15,10 @@ run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[display]
+
+window/stretch/mode="canvas_items"
+
 [editor]
 
 movie_writer/movie_file="/home/daniel/Desktop/gamedev/projects/zero lines/movie.avi"
@@ -50,6 +54,7 @@ cancel_motion={
 2d_physics/layer_5="squasher"
 2d_physics/layer_6="squash_detector"
 2d_physics/layer_7="enemy_blocker"
+2d_physics/layer_8="player_head"
 
 [rendering]
 

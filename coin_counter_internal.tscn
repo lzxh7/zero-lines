@@ -1,0 +1,59 @@
+[gd_scene load_steps=9 format=3 uid="uid://iqc1ca157k3"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_nb5o3"]
+
+[sub_resource type="Gradient" id="Gradient_wfjmq"]
+offsets = PackedFloat32Array(0, 0.897661)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_km66i"]
+gradient = SubResource("Gradient_wfjmq")
+
+[sub_resource type="QuadMesh" id="QuadMesh_va5qs"]
+
+[sub_resource type="Gradient" id="Gradient_ef1gr"]
+offsets = PackedFloat32Array(0, 0.897661)
+colors = PackedColorArray(1, 0.85098, 0, 1, 1, 0.85098, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_j5ry3"]
+gradient = SubResource("Gradient_ef1gr")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lxgy2"]
+size = Vector2(12, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wkp52"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+position = Vector2(220, 63.875)
+scale = Vector2(440, 128.25)
+mesh = SubResource("QuadMesh_nb5o3")
+texture = SubResource("GradientTexture2D_km66i")
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+position = Vector2(-8, 0)
+gravity_scale = 0.0
+linear_damp = 60.0
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="RigidBody2D"]
+position = Vector2(-208, 65.75)
+scale = Vector2(440, 132.5)
+mesh = SubResource("QuadMesh_va5qs")
+texture = SubResource("GradientTexture2D_j5ry3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+position = Vector2(6, 12)
+shape = SubResource("RectangleShape2D_lxgy2")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(356, 16)
+shape = SubResource("RectangleShape2D_wkp52")
+
+[node name="AllCoinsFound" type="Timer" parent="Area2D"]
+wait_time = 0.001
+one_shot = true
+
+[connection signal="body_entered" from="Area2D" to="Area2D/AllCoinsFound" method="start" unbinds=1]
