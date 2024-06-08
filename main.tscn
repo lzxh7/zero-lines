@@ -699,6 +699,7 @@ distance = -648.0
 
 [sub_resource type="Animation" id="Animation_v8jb7"]
 length = 0.001
+step = 0.0166667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -759,6 +760,46 @@ tracks/4/keys = {
 "update": 0,
 "values": [Vector2(0, 0)]
 }
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Resetables")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"show", [], false],
+"method": &"propagate_call"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Resetables")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"set_process_mode", [0], true],
+"method": &"propagate_call"
+}]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Player/Squasher:process_mode")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
 
 [sub_resource type="Animation" id="Animation_4illw"]
 resource_name = "reset"
@@ -818,6 +859,18 @@ tracks/3/keys = {
 "method": &"add_constant_central_force"
 }]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Player/Squasher:process_mode")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_2g5x2"]
 _data = {
@@ -835,15 +888,12 @@ texture_filter = 1
 scale = Vector2(4, 4)
 tile_set = SubResource("TileSet_2fnnd")
 format = 2
-layer_0/tile_data = PackedInt32Array(2162718, 131072, 0, 2162719, 131072, 0, 2162720, 131072, 0, 2162721, 131072, 0, 2162722, 131072, 0, 2162723, 131072, 0, 2162724, 131072, 0, 2162725, 131072, 0, 2162726, 131072, 0, 2162727, 131072, 0, 2162728, 131072, 0, 2162729, 131072, 0, 2162730, 131072, 0, 2162731, 131072, 0, 2097188, 131072, 0, 196607, 196608, 1, 262143, 196608, 6, 327679, 196608, 6, 393215, 196608, 6, 458751, 196608, 6, 524287, 196608, 6, 589823, 262144, 1, 524288, 131072, 1, 524289, 131072, 1, 524290, 131072, 1, 524291, 131072, 1, 524292, 131072, 1, 524293, 131072, 1, 524294, 131072, 1, 524295, 131072, 1, 524296, 131072, 1, 655359, 131072, 7, 589824, 131072, 7, 589825, 131072, 7, 589826, 131072, 7, 589827, 131072, 7, 589828, 131072, 7, 589829, 131072, 7, 589830, 131072, 7, 589822, 65536, 6, 655358, 65536, 7, 524286, 65536, 6, 458750, 65536, 6, 589831, 131072, 7, 589832, 131072, 7, 589833, 131072, 7, 524297, 131072, 1, 524298, 327680, 1, 589834, 131072, 7, 458762, 65536, 1, 524299, 131072, 6, 458763, 131072, 1, 589835, 131072, 7, 589836, 131072, 7, 524300, 131072, 6, 458764, 327680, 1, 393228, 65536, 1, 393229, 196608, 1, 458765, 196608, 6, 524301, 196608, 6, 589837, 196608, 7, 393214, 65536, 6, 327678, 65536, 6, 262142, 65536, 6, 196606, 65536, 1)
+layer_0/tile_data = PackedInt32Array(2162718, 131072, 0, 2162719, 131072, 0, 2162720, 131072, 0, 2162721, 131072, 0, 2162722, 131072, 0, 2162723, 131072, 0, 2162724, 131072, 0, 2162725, 131072, 0, 2162726, 131072, 0, 2162727, 131072, 0, 2162728, 131072, 0, 2162729, 131072, 0, 2162730, 131072, 0, 2162731, 131072, 0, 2097188, 131072, 0, 196607, 196608, 1, 262143, 196608, 6, 327679, 196608, 6, 393215, 196608, 6, 458751, 196608, 6, 524287, 196608, 6, 589823, 262144, 1, 524288, 131072, 1, 524289, 131072, 1, 524290, 131072, 1, 524291, 131072, 1, 524292, 131072, 1, 524293, 131072, 1, 524294, 131072, 1, 524295, 131072, 1, 524296, 131072, 1, 655359, 131072, 7, 589824, 131072, 7, 589825, 131072, 7, 589826, 131072, 7, 589827, 131072, 7, 589828, 131072, 7, 589829, 131072, 7, 589830, 131072, 7, 589822, 65536, 6, 655358, 65536, 7, 524286, 65536, 6, 458750, 65536, 6, 589831, 131072, 7, 589832, 131072, 7, 589833, 131072, 7, 524297, 131072, 1, 524298, 327680, 1, 589834, 131072, 7, 458762, 65536, 1, 524299, 131072, 6, 458763, 131072, 1, 589835, 131072, 7, 589836, 131072, 7, 524300, 131072, 6, 458764, 327680, 1, 393228, 65536, 1, 393229, 196608, 1, 458765, 196608, 6, 524301, 262144, 1, 589837, 131072, 7, 393214, 65536, 6, 327678, 65536, 6, 262142, 65536, 6, 196606, 65536, 1, 393226, 327680, 4, 458752, 262144, 6, 458753, 327680, 6, 524302, 131072, 1, 524303, 131072, 1, 524304, 196608, 6, 458768, 0, 6, 393232, 0, 1, 589838, 131072, 7, 589839, 131072, 7, 589840, 196608, 7, 458767, 524288, 3)
 
 [node name="Player" parent="World" instance=ExtResource("1_ou0uc")]
 position = Vector2(457, 528)
 collision_mask = 3
 constant_force = Vector2(0, 0)
-
-[node name="Timer" parent="World/Player/EnemyDetection" index="1"]
-one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="World/Player"]
 limit_left = 0
@@ -866,7 +916,9 @@ offset_right = 1936.0
 offset_bottom = 1228.0
 color = Color(0.493063, 0.796654, 1, 1)
 
-[node name="Enemy" parent="World" instance=ExtResource("3_f3hby")]
+[node name="Resetables" type="Node2D" parent="World"]
+
+[node name="Enemy" parent="World/Resetables" instance=ExtResource("3_f3hby")]
 position = Vector2(167, 543)
 
 [node name="StaticBody2D" type="RigidBody2D" parent="World"]
@@ -878,6 +930,7 @@ gravity_scale = 0.0
 shape = SubResource("WorldBoundaryShape2D_ygyig")
 
 [node name="ResetGame" type="AnimationPlayer" parent="World"]
+process_mode = 3
 libraries = {
 "": SubResource("AnimationLibrary_2g5x2")
 }
